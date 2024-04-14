@@ -1,0 +1,10 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="ClangTidy" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="clangTidyChecks" value="-*,misc-misplaced-const,misc-new-delete-overloads,misc-no-recursion,misc-non-copyable-objects,misc-throw-by-value-catch-by-reference,misc-unconventional-assign-operator,misc-uniqueptr-reset-release,mpi-buffer-deref,mpi-type-mismatch,openmp-use-default-none,google-*,portability-*,modernize-*,-modernize-use-nodiscard,-modernize-use-trailing-return-type,-modernize-use-auto,linuxkernel-*,cppcoreguidelines-*,-cppcoreguidelines-narrowing-conversions,-cppcoreguidelines-avoid-do-while,boost-*,cert-*,hicpp-*,-hicpp-special-member-functions,-hicpp-member-init,-hicpp-use-auto,performance-*,-performance-unnecessary-value-param,-performance-unnecessary-copy-initialization,abseil-*,bugprone-*,-bugprone-narrowing-conversions,-bugprone-easily-swappable-parameters,readability-*,clang-analyzer-*,-clang-analyzer-core.uninitialized.NewArraySize,-clang-analyzer-core.uninitialized.Branch,-clang-analyzer-core.uninitialized.UndefReturn,-clang-analyzer-core.uninitialized.CapturedBlockVariable,-clang-analyzer-core.uninitialized.ArraySubscript,-clang-analyzer-core.uninitialized.Assign" />
+      <option name="preferClangTidyFilesOverIDESettings" value="false" />
+    </inspection_tool>
+    <inspection_tool class="IncorrectFormatting" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  </profile>
+</component>
