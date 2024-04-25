@@ -9,40 +9,119 @@
 #include <iomanip>
 #include <iostream>
 
-static const uint8_t BOARD_SIZE = 9;
+#include "Move.h"
+#include "Pieces.h"
+#include "Squares.h"
+
+static constexpr uint8_t BOARD_SIZE = 9;
 
 static const QString DEFAULT_BOARD =
     "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b ";
 
-// clang-format off
-enum Squares {
-    a1, a2, a3, a4, a5, a6, a7, a8, a9,
-    b1, b2, b3, b4, b5, b6, b7, b8, b9,
-    c1, c2, c3, c4, c5, c6, c7, c8, c9,
-    d1, d2, d3, d4, d5, d6, d7, d8, d9,
-    e1, e2, e3, e4, e5, e6, e7, e8, e9,
-    f1, f2, f3, f4, f5, f6, f7, f8, f9,
-    g1, g2, g3, g4, g5, g6, g7, g8, g9,
-    h1, h2, h3, h4, h5, h6, h7, h8, h9,
-    i1, i2, i3, i4, i5, i6, i7, i8, i9
+static const std::array<int, BOARD_SIZE * BOARD_SIZE> BLACK_SAFETY_TABLE = {
+    // clang-format off
+    0,  0,  0,   0,   0,   0,   0,   0,  0,
+    1, 1, 2,  2,  3,  3,  3,  4, 5,
+    5, 6, 6,  7,  8,  8,  8,  9, 10,
+    11, 12, 13, 14, 15, 16, 18, 19, 20,
+    21, 22, 23, 24, 26, 27, 28, 29, 30,
+    31, 33, 34, 35, 36, 37, 38, 40, 41,
+    42, 43, 44, 45, 47, 48, 49, 50, 50,
+    50, 50, 50, 45, 40, 45, 50, 50, 50,
+    50, 50, 50, 45, 40, 45, 50, 50, 50
 };
-
+// clang-format on
+static const std::array<int, BOARD_SIZE * BOARD_SIZE> WHITE_SAFETY_TABLE = {
+    // clang-format off
+    50, 50, 50, 45, 40, 45, 50, 50, 50,
+    50, 50, 50, 45, 40, 45, 50, 50, 50,
+    42, 43, 44, 45, 47, 48, 49, 50, 50,
+    31, 33, 34, 35, 36, 37, 38, 40, 41,
+    21, 22, 23, 24, 26, 27, 28, 29, 30,
+    11, 12, 13, 14, 15, 16, 18, 19, 20,
+    5, 6, 6,  7,  8,  8,  8,  9, 10,
+    1, 1, 2,  2,  3,  3,  3,  4, 5,
+    0,  0,  0,   0,   0,   0,   0,   0,  0,
+};
+// clang-format on
+static const std::array<int, BOARD_SIZE * BOARD_SIZE> BLACK_PAWN_VALUES_MAP{
+    // clang-format off
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    50, 50, 50, 50, 50, 50, 50, 50, 50,
+    20, 20, 20, 20, 20, 20, 20, 20, 20,
+    30, 30, 30, 30, 30, 30, 30, 30, 30,
+    40, 40, 40, 40, 40, 40, 40, 40, 40,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+// clang-format on
+static const std::array<int, BOARD_SIZE * BOARD_SIZE> WHITE_PAWN_VALUES_MAP{
+    // clang-format off
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    40, 40, 40, 40, 40, 40, 40, 40, 40,
+    30, 30, 30, 30, 30, 30, 30, 30, 30,
+    20, 20, 20, 20, 20, 20, 20, 20, 20,
+    50, 50, 50, 50, 50, 50, 50, 50, 50,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
 // clang-format on
 
 class Board {
    public:
     Board();
     void print();
+    void printMoves();
     void setBoardSFEN(QString);
+    void precalcDistanceToEdges();
     void setPiece(uint8_t, uint8_t);
+    void makeMove(Move);
+    QVector<Move> generateMoves();
+    QVector<Move> generateGeneralsKingMoves(uint8_t, uint8_t);
+    QVector<Move> generateSlidingMoves(uint8_t, uint8_t);
+    QVector<Move> generatePawnLanceMoves(uint8_t, uint8_t);
+    QVector<Move> generateKnightMoves(uint8_t, uint8_t);
+    QVector<Move> generatePlacements();
+    void generatePawnAttackMap();
+    void reorderMoves(QVector<Move>&);
+    Move search(int);
+    int negaMax(int, int, int);
+    std::array<std::array<QVector<uint8_t>, 2>, 16> snapshot();
+    void setSnapshot(std::array<std::array<QVector<uint8_t>, 2>, 16>);
+    int evalBoard();
+    int countMaterial(uint8_t);
 
-    //private:
+   private:
     QVector<uint8_t> squares;
-    //0 - black
-    //1 - white
-    uchar current_turn;
+    //32 - black
+    //16 - white
+    uint8_t current_turn = 32;
+    uint32_t number_of_turns = 0;
     QVector<uint8_t> white_komadai;
     QVector<uint8_t> black_komadai;
+    QVector<Move> possible_moves;
+    QVector<QVector<uint8_t>> distance_to_edgs;
+
+    std::array<QVector<uint8_t>, 2> kings;
+    std::array<QVector<uint8_t>, 2> pawns;
+    std::array<QVector<uint8_t>, 2> lances;
+    std::array<QVector<uint8_t>, 2> knights;
+    std::array<QVector<uint8_t>, 2> silvers;
+    std::array<QVector<uint8_t>, 2> golds;
+    std::array<QVector<uint8_t>, 2> turned_pawns;
+    std::array<QVector<uint8_t>, 2> turned_lances;
+    std::array<QVector<uint8_t>, 2> turned_knights;
+    std::array<QVector<uint8_t>, 2> turned_silvers;
+    std::array<QVector<uint8_t>, 2> bishops;
+    std::array<QVector<uint8_t>, 2> rooks;
+    std::array<QVector<uint8_t>, 2> turned_rooks;
+    std::array<QVector<uint8_t>, 2> turned_bishops;
+
+    std::array<QVector<uint8_t>, 2> pawn_attack_map;
 };
 
-#endif  // !COURSEWORK_LIB_BOARD_H_
+#endif  // COURSEWORK_LIB_BOARD_H_

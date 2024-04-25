@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.27)
 project(coursework)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -17,7 +17,11 @@ find_package(Qt5 COMPONENTS
 add_executable(coursework src/main.cpp
         lib/Board.cpp
         include/Board.h
-        include/Pieces.h)
+        include/Pieces.h
+        lib/Move.cpp
+        include/Move.h
+        include/Squares.h
+        lib/Pieces.cpp)
 target_link_libraries(coursework
         Qt5::Core
         Qt5::Gui

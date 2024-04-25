@@ -2,6 +2,9 @@
 #include <QString>
 #include <unordered_map>
 
+static const uint8_t COLOR_MASK = 0b00110000;
+static const uint8_t TYPE_MASK = 0b00001111;
+
 enum Pieces : uint8_t {
     None = 0,
     King = 1,
@@ -25,30 +28,42 @@ enum Pieces : uint8_t {
 
 static const std::unordered_map<uint8_t, QString> PieceLiterals = {
     { None, "0" },
-    { Black | King, "k" },
-    { Black | Pawn, "p" },
-    { Black | Lance, "l" },
-    { Black | Knight, "n" },
-    { Black | Silver, "s" },
-    { Black | Gold, "g" },
-    { Black | Bishop, "b" },
-    { Black | Rook, "r" },
-    { Black | TurnedPawn, "+p" },
-    { Black | TurnedLance, "+l" },
-    { Black | TurnedSilver, "+s" },
-    { Black | TurnedBishop, "+b" },
-    { Black | TurnedRook, "+r" },
-    { White | King, "K" },
-    { White | Pawn, "P" },
-    { White | Lance, "L" },
-    { White | Knight, "N" },
-    { White | Silver, "S" },
-    { White | Gold, "G" },
-    { White | Bishop, "B" },
-    { White | Rook, "R" },
-    { White | TurnedPawn, "+P" },
-    { White | TurnedLance, "+L" },
-    { White | TurnedSilver, "+S" },
-    { White | TurnedBishop, "+B" },
-    { White | TurnedRook, "+R" },
+    { White | King, "k" },
+    { White | Pawn, "p" },
+    { White | Lance, "l" },
+    { White | Knight, "n" },
+    { White | Silver, "s" },
+    { White | Gold, "g" },
+    { White | Bishop, "b" },
+    { White | Rook, "r" },
+    { White | TurnedPawn, "+p" },
+    { White | TurnedLance, "+l" },
+    { White | TurnedKnight, "+n" },
+    { White | TurnedSilver, "+s" },
+    { White | TurnedBishop, "+b" },
+    { White | TurnedRook, "+r" },
+    { Black | King, "K" },
+    { Black | Pawn, "P" },
+    { Black | Lance, "L" },
+    { Black | Knight, "N" },
+    { Black | Silver, "S" },
+    { Black | Gold, "G" },
+    { Black | Bishop, "B" },
+    { Black | Rook, "R" },
+    { Black | TurnedPawn, "+P" },
+    { Black | TurnedLance, "+L" },
+    { Black | TurnedKnight, "+N" },
+    { Black | TurnedSilver, "+S" },
+    { Black | TurnedBishop, "+B" },
+    { Black | TurnedRook, "+R" },
 };
+
+static const std::unordered_map<uint8_t, uint8_t> PieceValue{
+    { None, 0 },         { King, 500 },        { Pawn, 1 },
+    { Lance, 4 },        { Knight, 5 },        { Silver, 7 },
+    { Gold, 8 },         { Bishop, 11 },       { Rook, 13 },
+    { TurnedPawn, 10 },  { TurnedLance, 9 },   { TurnedKnight, 9 },
+    { TurnedSilver, 8 }, { TurnedBishop, 15 }, { TurnedRook, 17 }
+};
+
+bool isSliding(uint8_t);
