@@ -21,7 +21,27 @@ add_executable(coursework src/main.cpp
         lib/Move.cpp
         include/Move.h
         include/Squares.h
-        lib/Pieces.cpp)
+        lib/Pieces.cpp
+        lib/evaluation.cpp
+        lib/search.cpp
+        lib/move_generation.cpp
+        include/SquareValues.h
+        src/startmenu.cpp
+        src/startmenu.h
+        src/startmenu.ui
+        src/mainwindow.cpp
+        src/mainwindow.h
+        src/mainwindow.ui
+        src/textboard.cpp
+        src/textboard.h
+        src/textboard.ui
+        src/movelineedit.cpp
+        src/movelineedit.h
+        src/movelineedit.ui
+        src/endmenu.cpp
+        src/endmenu.h
+        src/endmenu.ui
+)
 target_link_libraries(coursework
         Qt5::Core
         Qt5::Gui
