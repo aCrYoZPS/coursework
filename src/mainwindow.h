@@ -30,7 +30,7 @@ class MainWindow;
 
 QT_END_NAMESPACE
 
-static const int TIMER_INTERVAL = 1000;
+static const int TIMER_INTERVAL = 1001;
 static const int RIGHT_MENU_MINIMUM_WIDTH = 100;
 static const int MOVE_LOG_MAX_HEIGHT = 250;
 static const int KOMADAI_HEIGHT = 25;
@@ -45,6 +45,7 @@ class MainWindow : public QWidget {
     ~MainWindow() override;
 
    private:
+    uint8_t starting_color;
     QVector<QRegExp> reg_exprs;
     TextBoard* board_rep;
     QLabel* vertical_coords;
@@ -71,13 +72,14 @@ class MainWindow : public QWidget {
     QString moveToPGN(const Move& move);
     EndMenu* end_menu;
     StartMenu* start_menu;
+    uint32_t move_count = 1;
 
    signals:
     void gameEnd(uint8_t);
    private slots:
     void makeMove();
     void tick();
-    void start(bool);
+    void start(bool, uint8_t);
     void end();
     void restart();
     void mate(uint8_t);

@@ -6,9 +6,9 @@
 #define COURSEWORK_SRC_STARTMENU_H_
 
 #include <QPushButton>
+#include <QRadioButton>
 #include <QVBoxLayout>
 #include <QWidget>
-
 
 QT_BEGIN_NAMESPACE
 
@@ -28,9 +28,11 @@ class StartMenu : public QWidget {
     void onBotClick();
     void onPlayerClick();
    signals:
-    void botChosen(bool);
+    void botChosen(bool, uint8_t);
 
    private:
+    QRadioButton* black;
+    QRadioButton* white;
     QPushButton* bot_button;
     QPushButton* player_button;
     QVBoxLayout* vbox;

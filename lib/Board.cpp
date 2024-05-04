@@ -2,6 +2,7 @@
 
 Board::Board(QString SFEN) {
     this->current_turn = Pieces::Black;
+    this->initHash();
     this->squares = QVector<uint8_t>(BOARD_SIZE * BOARD_SIZE, 0);
     this->white_komadai = QVector<uint8_t>(0, 0);
     this->black_komadai = QVector<uint8_t>(0, 0);
@@ -688,4 +689,26 @@ bool Board::isAmbiguous(const Move& move) {
         }
     }
     return false;
+}
+
+void Board::initHash() {
+    this->zobrist =
+        std::array<std::array<uint64_t, 13>, BOARD_SIZE * BOARD_SIZE + 1>{ 0 };
+    for (auto& line : this->zobrist) {
+        QRandomGenerator64::global()->fillRange(line.data(), 13);
+    }
+}
+
+uint64_t Board::hash() {
+    uint64_t h;
+    if (this->current_turn == Pieces::Black) {
+        h ^= this->zobrist[81][0];
+    }
+    for (int i = 0; i < BOARD_SIZE * BOARD_SIZE; ++i) {
+        if (this->squares[i] != 0) {
+            uint8_t piece = (this->squares[i] & TYPE_MASK);
+            h ^= this->zobrist[i][piece];
+        }
+    }
+    return h;
 }

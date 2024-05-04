@@ -9,12 +9,18 @@
 
 StartMenu::StartMenu(QWidget* parent) : QWidget(parent), ui(new Ui::StartMenu) {
     ui->setupUi(this);
+
     this->bot_button = new QPushButton("Play with bot");
     this->player_button = new QPushButton("Play with friend");
+
+    this->black = new QRadioButton("Black");
+    this->white = new QRadioButton("White");
 
     this->vbox = new QVBoxLayout;
     this->vbox->addWidget(this->bot_button);
     this->vbox->addWidget(this->player_button);
+    this->vbox->addWidget(this->black);
+    this->vbox->addWidget(this->white);
 
     QObject::connect(this->bot_button, SIGNAL(clicked()), this,
                      SLOT(onBotClick()));
@@ -24,12 +30,16 @@ StartMenu::StartMenu(QWidget* parent) : QWidget(parent), ui(new Ui::StartMenu) {
 }
 
 void StartMenu::onBotClick() {
-    emit botChosen(true);
+    uint8_t color = 32;
+    if (this->white->isChecked()) {
+        color = 16;
+    }
+    emit botChosen(true, color);
     this->hide();
 }
 
 void StartMenu::onPlayerClick() {
-    emit botChosen(false);
+    emit botChosen(false, 0);
     this->hide();
 }
 

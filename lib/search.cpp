@@ -65,11 +65,20 @@ int Board::negaMax(int depth, int alpha, int beta) {
         int perspective = (this->current_turn == Pieces::Black) ? -1 : 1;
         return (std::numeric_limits<int>::min() + 1) * perspective;
     }
+    uint64_t hashed_pos = this->hash();
+    if (this->transpositions.contains(hashed_pos)) {
+        int eval = this->transpositions.at(hashed_pos);
+        if (eval >= beta) {
+            return beta;
+        }
+        return std::max(alpha, eval);
+    }
     this->reorderMoves(moves);
     for (Move move : moves) {
         Board tmp(*this);
         tmp.makeMove(move);
         int eval = -tmp.negaMax(depth - 1, -beta, -alpha);
+        this->transpositions.insert(std::make_pair(hashed_pos, eval));
         if (eval >= beta) {
             return beta;
         }

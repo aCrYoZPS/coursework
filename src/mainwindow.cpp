@@ -15,13 +15,11 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(this->mate_checker, SIGNAL(timeout()), this,
                      SLOT(mateCheck()));
     mate_checker->start(100);
-
-
     this->hide();
     this->start_menu = new StartMenu(nullptr);
     this->start_menu->show();
-    QObject::connect(this->start_menu, SIGNAL(botChosen(bool)), this,
-                     SLOT(start(bool)));
+    QObject::connect(this->start_menu, SIGNAL(botChosen(bool, uint8_t)), this,
+                     SLOT(start(bool, uint8_t)));
 
     this->end_menu = new EndMenu;
     QObject::connect(this->end_menu, SIGNAL(end()), this, SLOT(end()));
@@ -59,7 +57,8 @@ MainWindow::MainWindow(QWidget* parent)
     this->timer_vbox->addWidget(this->move_log);
     this->timer_vbox->addWidget(this->black_timer);
 
-    this->board = Board("4k4/9/9/9/9/9/9/9/4K4 b RBGSNLP");
+    this->board = Board(DEFAULT_BOARD);
+
     this->board_rep = new TextBoard;
     this->board_rep->setText(this->board.print());
 
@@ -143,7 +142,7 @@ void MainWindow::makeMove() {
         this->white_komadai->setText(this->board.printKomadai(Pieces::White));
         this->black_komadai->setText(this->board.printKomadai(Pieces::Black));
         if (isBot) {
-            Move next_move = this->board.search(2);
+            Move next_move = this->board.search(3);
             this->board.makeMove(next_move);
             this->move_log->append(this->moveToPGN(next_move));
             this->white_komadai->setText(
@@ -157,7 +156,8 @@ void MainWindow::makeMove() {
 
 QString MainWindow::moveToPGN(const Move& move) {
     QString res;
-    res.append(QString("%1. ").arg(this->board.getTurnCount() + 1));
+    res.append(QString("%1. ").arg(this->move_count));
+    this->move_count++;
     res.append(
         pieceLiterals.at((move.pieceType() & TYPE_MASK) | Pieces::Black));
     if (this->board.isAmbiguous(move)) {
@@ -272,9 +272,24 @@ void MainWindow::end() {
     this->close();
 }
 
-void MainWindow::start(bool is_bot) {
+void MainWindow::start(bool is_bot, uint8_t start_color) {
     this->show();
     this->isBot = is_bot;
+    if (is_bot) {
+        this->timer->stop();
+        this->black_timer->hide();
+        this->white_timer->hide();
+        if (start_color == Pieces::White) {
+            Move move = this->board.search(3);
+            this->move_log->append(this->moveToPGN(move));
+            this->board.makeMove(move);
+            this->board_rep->setText(this->board.print());
+            this->white_komadai->setText(
+                this->board.printKomadai(Pieces::White));
+            this->black_komadai->setText(
+                this->board.printKomadai(Pieces::Black));
+        }
+    }
 }
 
 void MainWindow::mate(uint8_t mated) {
@@ -291,5 +306,7 @@ void MainWindow::restart() {
     this->black_time->setHMS(0, 10, 0);
     this->white_time->setHMS(0, 10, 0);
     this->board_rep->setText(this->board.print());
+    this->white_timer->show();
+    this->black_timer->show();
     this->start_menu->show();
 }

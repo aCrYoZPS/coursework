@@ -33,6 +33,7 @@ enum MoveType : uint8_t {
 
 class Move {
    public:
+    Move();
     Move(uint8_t square, uint8_t destination, uint8_t piece, uint8_t type);
     void print();
     uint8_t startSq() const;
