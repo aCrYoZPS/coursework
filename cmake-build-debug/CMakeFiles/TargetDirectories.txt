@@ -1,0 +1,5 @@
+/home/acryoz/coursework/cmake-build-debug/CMakeFiles/coursework.dir
+/home/acryoz/coursework/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/acryoz/coursework/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/acryoz/coursework/cmake-build-debug/CMakeFiles/coursework_autogen_timestamp_deps.dir
+/home/acryoz/coursework/cmake-build-debug/CMakeFiles/coursework_autogen.dir

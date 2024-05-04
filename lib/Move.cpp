@@ -26,7 +26,11 @@ uint8_t Move::pieceType() const {
 bool Move::operator==(const Move& lhs) const {
     return (this->start == lhs.startSq()) &&
            (this->destination == lhs.destSq()) &&
-           (this->piece == lhs.pieceType());
+           (this->piece == lhs.pieceType()) && (this->type == lhs.type);
+}
+
+bool Move::operator!=(const Move& lhs) const {
+    return !(*this == lhs);
 }
 
 int Move::getScore() {
@@ -45,7 +49,13 @@ uint8_t Move::moveType() const {
     return this->type;
 }
 
+bool Move::ambiguous(const Move& other) const {
+    return (this->destination == other.destination &&
+            this->start != other.start && this->type == other.type &&
+            this->piece == other.piece);
+}
+
 void Move::print() {
-    qDebug() << PieceLiterals.at(this->piece) << this->start
+    qDebug() << pieceLiterals.at(this->piece) << this->start
              << this->destination << this->score;
 }

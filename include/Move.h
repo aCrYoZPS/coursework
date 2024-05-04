@@ -22,7 +22,7 @@ enum Directions : int8_t {
     SE = 7,     //8
 };
 
-static const int8_t DIRECTION_OFFSET[8]{ -9, 9, -1, 1, -8, -10, 10, 8 };
+static const int DIRECTION_OFFSET[8]{ -9, 9, -1, 1, -8, -10, 10, 8 };
 
 enum MoveType : uint8_t {
     Regular,
@@ -33,16 +33,18 @@ enum MoveType : uint8_t {
 
 class Move {
    public:
-    Move(uint8_t, uint8_t, uint8_t, uint8_t);
+    Move(uint8_t square, uint8_t destination, uint8_t piece, uint8_t type);
     void print();
     uint8_t startSq() const;
     uint8_t destSq() const;
     uint8_t pieceType() const;
     uint8_t moveType() const;
     bool operator==(const Move& lhs) const;
+    bool operator!=(const Move& lhs) const;
     bool operator<(const Move& other) const;
     int getScore();
     void setScore(int);
+    bool ambiguous(const Move& other) const;
 
    private:
     int score = 0;

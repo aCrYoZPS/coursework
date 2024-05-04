@@ -26,8 +26,8 @@ enum Pieces : uint8_t {
     Black = 32,
 };
 
-static const std::unordered_map<uint8_t, QString> PieceLiterals = {
-    { None, "0" },
+static const std::unordered_map<uint8_t, QString> pieceLiterals = {
+    { None, "-" },
     { White | King, "k" },
     { White | Pawn, "p" },
     { White | Lance, "l" },
@@ -58,7 +58,39 @@ static const std::unordered_map<uint8_t, QString> PieceLiterals = {
     { Black | TurnedRook, "+R" },
 };
 
-static const std::unordered_map<uint8_t, uint8_t> PieceValue{
+static const std::unordered_map<std::string, uint8_t> pieceByLiteral = {
+    { "-", None },
+    { "k", White | King },
+    { "p", White | Pawn },
+    { "l", White | Lance },
+    { "n", White | Knight },
+    { "s", White | Silver },
+    { "g", White | Gold },
+    { "b", White | Bishop },
+    { "r", White | Rook },
+    { "+p", White | TurnedPawn },
+    { "+l", White | TurnedLance },
+    { "+n", White | TurnedKnight },
+    { "+s", White | TurnedSilver },
+    { "+b", White | TurnedBishop },
+    { "+r", White | TurnedRook },
+    { "K", Black | King },
+    { "P", Black | Pawn },
+    { "L", Black | Lance },
+    { "N", Black | Knight },
+    { "S", Black | Silver },
+    { "G", Black | Gold },
+    { "B", Black | Bishop },
+    { "R", Black | Rook },
+    { "+P", Black | TurnedPawn },
+    { "+L", Black | TurnedLance },
+    { "+N", Black | TurnedKnight },
+    { "+S", Black | TurnedSilver },
+    { "+B", Black | TurnedBishop },
+    { "+R", Black | TurnedRook },
+};
+
+static const std::unordered_map<uint8_t, int16_t> PieceValue{
     { None, 0 },         { King, 500 },        { Pawn, 1 },
     { Lance, 4 },        { Knight, 5 },        { Silver, 7 },
     { Gold, 8 },         { Bishop, 11 },       { Rook, 13 },
