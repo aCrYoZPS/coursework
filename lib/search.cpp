@@ -15,37 +15,37 @@ void Board::reorderMoves(QVector<Move>& moves) {
         uint8_t capture_piece = TYPE_MASK & this->squares[move.destSq()];
         if (capture_piece != Pieces::None) {
             move_score = CAPTURE_MULTIPLIER *
-                         (static_cast<int>(PieceValue.at(capture_piece)) -
-                          static_cast<int>(PieceValue.at(move_piece)) + 1);
+                         (static_cast<int>(piece_value.at(capture_piece)) -
+                          static_cast<int>(piece_value.at(move_piece)) + 1);
         }
         if (move.moveType() == MoveType::Promotion) {
             switch (move.pieceType() & TYPE_MASK) {
                 case Pieces::Pawn:
-                    move_score += PieceValue.at(Pieces::TurnedPawn);
+                    move_score += piece_value.at(Pieces::TurnedPawn);
                     break;
                 case Pieces::Lance:
-                    move_score += PieceValue.at(Pieces::TurnedLance);
+                    move_score += piece_value.at(Pieces::TurnedLance);
                     break;
                 case Pieces::Knight:
-                    move_score += PieceValue.at(Pieces::TurnedKnight);
+                    move_score += piece_value.at(Pieces::TurnedKnight);
                     break;
                 case Pieces::Silver:
-                    move_score += PieceValue.at(Pieces::TurnedSilver);
+                    move_score += piece_value.at(Pieces::TurnedSilver);
                     break;
                 case Pieces::Bishop:
-                    move_score += PieceValue.at(Pieces::TurnedBishop);
+                    move_score += piece_value.at(Pieces::TurnedBishop);
                     break;
                 case Pieces::Rook:
-                    move_score += PieceValue.at(Pieces::TurnedRook);
+                    move_score += piece_value.at(Pieces::TurnedRook);
                     break;
             }
-            move_score -= PieceValue.at(move.pieceType() & TYPE_MASK);
+            move_score -= piece_value.at(move.pieceType() & TYPE_MASK);
         }
         if (std::count(this->pawn_attack_map[opponent].begin(),
                        this->pawn_attack_map[opponent].end(),
                        move.destSq()) != 0) {
             move_score -= CAPTURE_MULTIPLIER *
-                          PieceValue.at(move.pieceType() & TYPE_MASK);
+                          piece_value.at(move.pieceType() & TYPE_MASK);
         }
         if ((this->squares[move.destSq()] & TYPE_MASK) == Pieces::King) {
             move.setScore(6000);

@@ -234,33 +234,42 @@ QVector<Move> Board::generateGeneralsKingMoves(uint8_t square, uint8_t piece) {
             if ((piece & TYPE_MASK) == Pieces::King) {
                 for (size_t i = destination % 9; i < BOARD_SIZE * BOARD_SIZE;
                      i += BOARD_SIZE) {
-                    if (i != destination &&
-                        (this->squares[i] == (opposite_color | Pieces::Rook) ||
-                         this->squares[i] ==
-                             (opposite_color | Pieces::TurnedRook))) {
-                        mateable = true;
-                        break;
-                    }
-                    if (color == Pieces::Black && i < destination &&
-                        this->squares[i] == (opposite_color | Pieces::Lance)) {
-                        mateable = true;
-                        break;
-                    }
-                    if (color == Pieces::White && i > destination &&
-                        this->squares[i] == (opposite_color | Pieces::Lance)) {
-                        mateable = true;
+                    if (this->squares[i] != 0) {
+                        if (i != destination &&
+                            (this->squares[i] ==
+                                 (opposite_color | Pieces::Rook) ||
+                             this->squares[i] ==
+                                 (opposite_color | Pieces::TurnedRook))) {
+                            mateable = true;
+                            break;
+                        }
+                        if (color == Pieces::Black && i < destination &&
+                            this->squares[i] ==
+                                (opposite_color | Pieces::Lance)) {
+                            mateable = true;
+                            break;
+                        }
+                        if (color == Pieces::White && i > destination &&
+                            this->squares[i] ==
+                                (opposite_color | Pieces::Lance)) {
+                            mateable = true;
+                            break;
+                        }
                         break;
                     }
                 }
                 uint rank_start = destination - destination % BOARD_SIZE;
                 uint rank_end = rank_start + BOARD_SIZE;
                 for (size_t i = rank_start; i < rank_end && !mateable; ++i) {
-                    if (i != destination &&
+                    if (this->squares[i] != 0) {
+                        if (i != destination &&
+                                this->squares[i] ==
+                                    (opposite_color | Pieces::Rook) ||
                             this->squares[i] ==
-                                (opposite_color | Pieces::Rook) ||
-                        this->squares[i] ==
-                            (opposite_color | Pieces::TurnedRook)) {
-                        mateable = true;
+                                (opposite_color | Pieces::TurnedRook)) {
+                            mateable = true;
+                            break;
+                        }
                         break;
                     }
                 }
@@ -304,12 +313,12 @@ QVector<Move> Board::generateGeneralsKingMoves(uint8_t square, uint8_t piece) {
                 while (!mateable && isValid(dest_copy)) {
                     if (dest_copy != destination &&
                         (this->squares[dest_copy] ==
-                                (opposite_color | Pieces::Bishop) ||
-                        this->squares[dest_copy] ==
-                            (opposite_color | Pieces::TurnedBishop))) {
-                            mateable = true;
-                            break;
-                        }
+                             (opposite_color | Pieces::Bishop) ||
+                         this->squares[dest_copy] ==
+                             (opposite_color | Pieces::TurnedBishop))) {
+                        mateable = true;
+                        break;
+                    }
                     dest_copy -= DIRECTION_OFFSET[Directions::SE];
                 }
                 if (color == Pieces::White) {

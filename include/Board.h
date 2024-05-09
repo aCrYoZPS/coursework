@@ -82,7 +82,7 @@ class Board {
     std::array<QVector<uint8_t>, 2> turned_rooks;
     std::array<QVector<uint8_t>, 2> turned_bishops;
 
-    std::array<std::array<uint64_t, 13>, BOARD_SIZE * BOARD_SIZE + 1> zobrist;
+    std::array<std::array<uint64_t, 28>, BOARD_SIZE * BOARD_SIZE + 1> zobrist;
     std::unordered_map<uint16_t, int32_t> transpositions;
     std::array<QVector<uint8_t>, 2> pawn_attack_map;
 };

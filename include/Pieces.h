@@ -26,7 +26,7 @@ enum Pieces : uint8_t {
     Black = 32,
 };
 
-static const std::unordered_map<uint8_t, QString> pieceLiterals = {
+static const std::unordered_map<uint8_t, QString> piece_literals = {
     { None, "-" },
     { White | King, "k" },
     { White | Pawn, "p" },
@@ -58,7 +58,7 @@ static const std::unordered_map<uint8_t, QString> pieceLiterals = {
     { Black | TurnedRook, "+R" },
 };
 
-static const std::unordered_map<std::string, uint8_t> pieceByLiteral = {
+static const std::unordered_map<std::string, uint8_t> piece_by_literal = {
     { "-", None },
     { "k", White | King },
     { "p", White | Pawn },
@@ -90,12 +90,29 @@ static const std::unordered_map<std::string, uint8_t> pieceByLiteral = {
     { "+R", Black | TurnedRook },
 };
 
-static const std::unordered_map<uint8_t, int16_t> PieceValue{
+static const std::unordered_map<uint8_t, int16_t> piece_value{
     { None, 0 },         { King, 500 },        { Pawn, 1 },
     { Lance, 4 },        { Knight, 5 },        { Silver, 7 },
     { Gold, 8 },         { Bishop, 11 },       { Rook, 13 },
     { TurnedPawn, 10 },  { TurnedLance, 9 },   { TurnedKnight, 9 },
     { TurnedSilver, 8 }, { TurnedBishop, 15 }, { TurnedRook, 17 }
+};
+
+static const std::unordered_map<uint8_t, uint8_t> zobrist_indicies = {
+    { White | King, 0 },          { White | Pawn, 1 },
+    { White | Lance, 2 },         { White | Knight, 3 },
+    { White | Silver, 4 },        { White | Gold, 5 },
+    { White | Bishop, 6 },        { White | Rook, 7 },
+    { White | TurnedPawn, 8 },    { White | TurnedLance, 9 },
+    { White | TurnedKnight, 10 }, { White | TurnedSilver, 11 },
+    { White | TurnedBishop, 12 }, { White | TurnedRook, 13 },
+    { Black | King, 14 },         { Black | Pawn, 15 },
+    { Black | Lance, 16 },        { Black | Knight, 17 },
+    { Black | Silver, 18 },       { Black | Gold, 19 },
+    { Black | Bishop, 20 },       { Black | Rook, 21 },
+    { Black | TurnedPawn, 22 },   { Black | TurnedLance, 23 },
+    { Black | TurnedKnight, 24 }, { Black | TurnedSilver, 25 },
+    { Black | TurnedBishop, 26 }, { Black | TurnedRook, 27 }
 };
 
 bool isSliding(uint8_t);

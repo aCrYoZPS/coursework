@@ -18,50 +18,52 @@ QString Board::print() {
     for (uint8_t color = 0; color < 2; ++color) {
         uint8_t piece_color = (color == 0) ? Pieces::Black : Pieces::White;
         for (uint8_t square : this->pawns[color]) {
-            output[square] = pieceLiterals.at(piece_color | Pieces::Pawn);
+            output[square] = piece_literals.at(piece_color | Pieces::Pawn);
         }
         for (uint8_t square : this->lances[color]) {
-            output[square] = pieceLiterals.at(piece_color | Pieces::Lance);
+            output[square] = piece_literals.at(piece_color | Pieces::Lance);
         }
         for (uint8_t square : this->knights[color]) {
-            output[square] = pieceLiterals.at(piece_color | Pieces::Knight);
+            output[square] = piece_literals.at(piece_color | Pieces::Knight);
         }
         for (uint8_t square : this->silvers[color]) {
-            output[square] = pieceLiterals.at(piece_color | Pieces::Silver);
+            output[square] = piece_literals.at(piece_color | Pieces::Silver);
         }
         for (uint8_t square : this->golds[color]) {
-            output[square] = pieceLiterals.at(piece_color | Pieces::Gold);
+            output[square] = piece_literals.at(piece_color | Pieces::Gold);
         }
         for (uint8_t square : this->bishops[color]) {
-            output[square] = pieceLiterals.at(piece_color | Pieces::Bishop);
+            output[square] = piece_literals.at(piece_color | Pieces::Bishop);
         }
         for (uint8_t square : this->rooks[color]) {
-            output[square] = pieceLiterals.at(piece_color | Pieces::Rook);
+            output[square] = piece_literals.at(piece_color | Pieces::Rook);
         }
         for (uint8_t square : this->turned_pawns[color]) {
-            output[square] = pieceLiterals.at(piece_color | Pieces::TurnedPawn);
+            output[square] =
+                piece_literals.at(piece_color | Pieces::TurnedPawn);
         }
         for (uint8_t square : this->turned_lances[color]) {
             output[square] =
-                pieceLiterals.at(piece_color | Pieces::TurnedLance);
+                piece_literals.at(piece_color | Pieces::TurnedLance);
         }
         for (uint8_t square : this->turned_knights[color]) {
             output[square] =
-                pieceLiterals.at(piece_color | Pieces::TurnedKnight);
+                piece_literals.at(piece_color | Pieces::TurnedKnight);
         }
         for (uint8_t square : this->turned_silvers[color]) {
             output[square] =
-                pieceLiterals.at(piece_color | Pieces::TurnedSilver);
+                piece_literals.at(piece_color | Pieces::TurnedSilver);
         }
         for (uint8_t square : this->turned_bishops[color]) {
             output[square] =
-                pieceLiterals.at(piece_color | Pieces::TurnedBishop);
+                piece_literals.at(piece_color | Pieces::TurnedBishop);
         }
         for (uint8_t square : this->turned_rooks[color]) {
-            output[square] = pieceLiterals.at(piece_color | Pieces::TurnedRook);
+            output[square] =
+                piece_literals.at(piece_color | Pieces::TurnedRook);
         }
         for (uint8_t square : this->kings[color]) {
-            output[square] = pieceLiterals.at(piece_color | Pieces::King);
+            output[square] = piece_literals.at(piece_color | Pieces::King);
         }
     }
     for (int i = 0; i < BOARD_SIZE; ++i) {
@@ -103,7 +105,7 @@ QString Board::printKomadai(uint8_t color) {
         (color == Pieces::Black) ? this->black_komadai : this->white_komadai;
     int count = 0;
     for (uint8_t piece : komadai) {
-        stream << pieceLiterals.at(piece);
+        stream << piece_literals.at(piece);
         if (count != komadai.length() - 1) {
             stream << ", ";
         }
@@ -693,9 +695,9 @@ bool Board::isAmbiguous(const Move& move) {
 
 void Board::initHash() {
     this->zobrist =
-        std::array<std::array<uint64_t, 13>, BOARD_SIZE * BOARD_SIZE + 1>{ 0 };
+        std::array<std::array<uint64_t, 28>, BOARD_SIZE * BOARD_SIZE + 1>{ 0 };
     for (auto& line : this->zobrist) {
-        QRandomGenerator64::global()->fillRange(line.data(), 13);
+        QRandomGenerator64::global()->fillRange(line.data(), 28);
     }
 }
 
@@ -706,7 +708,7 @@ uint64_t Board::hash() {
     }
     for (int i = 0; i < BOARD_SIZE * BOARD_SIZE; ++i) {
         if (this->squares[i] != 0) {
-            uint8_t piece = (this->squares[i] & TYPE_MASK);
+            uint8_t piece = zobrist_indicies.at(this->squares[i]);
             h ^= this->zobrist[i][piece];
         }
     }

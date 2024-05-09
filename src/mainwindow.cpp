@@ -142,7 +142,7 @@ void MainWindow::makeMove() {
         this->white_komadai->setText(this->board.printKomadai(Pieces::White));
         this->black_komadai->setText(this->board.printKomadai(Pieces::Black));
         if (isBot) {
-            Move next_move = this->board.search(3);
+            Move next_move = this->board.search(1);
             this->board.makeMove(next_move);
             this->move_log->append(this->moveToPGN(next_move));
             this->white_komadai->setText(
@@ -159,7 +159,7 @@ QString MainWindow::moveToPGN(const Move& move) {
     res.append(QString("%1. ").arg(this->move_count));
     this->move_count++;
     res.append(
-        pieceLiterals.at((move.pieceType() & TYPE_MASK) | Pieces::Black));
+        piece_literals.at((move.pieceType() & TYPE_MASK) | Pieces::Black));
     if (this->board.isAmbiguous(move)) {
         std::string coords;
         coords.push_back('1' + move.startSq() % BOARD_SIZE);

@@ -152,37 +152,37 @@ int Board::evalBoard() {
 
 int Board::countMaterial(uint8_t color_index) {
     int material = 0;
-    material += this->pawns[color_index].length() * PieceValue.at(Pieces::Pawn);
+    material += this->pawns[color_index].length() * piece_value.at(Pieces::Pawn);
     material +=
-        this->lances[color_index].length() * PieceValue.at(Pieces::Lance);
+        this->lances[color_index].length() * piece_value.at(Pieces::Lance);
     material +=
-        this->knights[color_index].length() * PieceValue.at(Pieces::Knight);
+        this->knights[color_index].length() * piece_value.at(Pieces::Knight);
     material +=
-        this->silvers[color_index].length() * PieceValue.at(Pieces::Silver);
-    material += this->golds[color_index].length() * PieceValue.at(Pieces::Gold);
+        this->silvers[color_index].length() * piece_value.at(Pieces::Silver);
+    material += this->golds[color_index].length() * piece_value.at(Pieces::Gold);
     material +=
-        this->bishops[color_index].length() * PieceValue.at(Pieces::Bishop);
-    material += this->rooks[color_index].length() * PieceValue.at(Pieces::Rook);
+        this->bishops[color_index].length() * piece_value.at(Pieces::Bishop);
+    material += this->rooks[color_index].length() * piece_value.at(Pieces::Rook);
     material += this->turned_pawns[color_index].length() *
-                PieceValue.at(Pieces::TurnedPawn);
+                piece_value.at(Pieces::TurnedPawn);
     material += this->turned_lances[color_index].length() *
-                PieceValue.at(Pieces::TurnedLance);
+                piece_value.at(Pieces::TurnedLance);
     material += this->turned_knights[color_index].length() *
-                PieceValue.at(Pieces::TurnedKnight);
+                piece_value.at(Pieces::TurnedKnight);
     material += this->turned_silvers[color_index].length() *
-                PieceValue.at(Pieces::TurnedSilver);
+                piece_value.at(Pieces::TurnedSilver);
     material += this->turned_bishops[color_index].length() *
-                PieceValue.at(Pieces::TurnedBishop);
+                piece_value.at(Pieces::TurnedBishop);
     material += this->turned_rooks[color_index].length() *
-                PieceValue.at(Pieces::TurnedRook);
-    material += PieceValue.at(Pieces::King);
+                piece_value.at(Pieces::TurnedRook);
+    material += piece_value.at(Pieces::King);
     if (color_index == 0) {
         for (uint8_t piece : this->black_komadai) {
-            material += PieceValue.at(piece & TYPE_MASK);
+            material += piece_value.at(piece & TYPE_MASK);
         }
     } else {
         for (uint8_t piece : this->white_komadai) {
-            material += PieceValue.at(piece & TYPE_MASK);
+            material += piece_value.at(piece & TYPE_MASK);
         }
     }
     return material;

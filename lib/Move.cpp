@@ -63,6 +63,6 @@ bool Move::ambiguous(const Move& other) const {
 }
 
 void Move::print() {
-    qDebug() << pieceLiterals.at(this->piece) << this->start
+    qDebug() << piece_literals.at(this->piece) << this->start
              << this->destination << this->score;
 }
